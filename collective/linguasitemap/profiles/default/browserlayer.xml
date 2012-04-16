@@ -1,0 +1,4 @@
+<layers>
+    <layer name="collective.linguasitemap"
+           interface="collective.linguasitemap.browser.interfaces.ILayer" />
+</layers>
