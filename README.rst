@@ -28,6 +28,6 @@ Authors
 
 ..Contributors
 
-.. |cirb| image:: www.cirb.irisnet.be/logo.jpg
+.. |cirb| image:: http://www.cirb.irisnet.be/logo.jpg
 .. _cirb: http://cirb.irisnet.be
 .. _sitemap: http://support.google.com/webmasters/bin/answer.py?hl=fr&answer=183668&topic=8476&ctx=topic
