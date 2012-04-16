@@ -26,9 +26,6 @@ class SiteMapTraverser(DefaultPublishTraverse):
         return sitemap_view
 
     def extractLanguage(self, name):
-        is_navigation_root = INavigationRoot.providedBy(self.context)
-        if is_navigation_root:
-            lang = self.context.Language()
 
         if name.startswith('sitemap') and len(name)>11 and '_' in name:
             sitemap = name.split('.')[0]
@@ -103,3 +100,13 @@ class SiteMapView(BaseView):
                 #'changefreq': 'always', # hourly/daily/weekly/monthly/yearly/never
                 #'prioriy': 0.5, # 0.0 to 1.0
             }
+
+class NavigationRootSiteMapView(SiteMapView):
+    """A sitemap that extract the language from the navigation root"""
+
+    def objects(self):
+        is_navigation_root = INavigationRoot.providedBy(self.context)
+        if is_navigation_root:
+            self.language = self.context.Language()
+        return super(NavigationRootSiteMapView, self).objects()
+

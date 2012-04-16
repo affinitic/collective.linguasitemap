@@ -16,6 +16,14 @@
       permission="zope2.Public"
      />
 
+  <browser:page
+      name="navigationroot_sitemap.xml.gz"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".sitemap.NavigationRootSiteMapView"
+      layer=".interfaces.ILayer"
+      permission="zope2.Public"
+     />
+
   <adapter
     for="Products.CMFCore.interfaces.ISiteRoot
          zope.publisher.interfaces.http.IHTTPRequest"
