@@ -9,18 +9,27 @@ from zope.traversing.interfaces import IBeforeTraverseEvent
 
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 
+import logging
+logger = logging.getLogger('test')
+
 class SiteMapTraverser(DefaultPublishTraverse):
     
     def publishTraverse(self, request, name):
         """catch sitemap name"""
 
         #pre condition
-        if not name.startswith('sitemap_') and not name.endswith('.xml.gz') and \
-           name == 'sitemap.xml.gz' and len(name) not in (17,19):
+        if not name.startswith('sitemap_') or not name.endswith('.xml.gz') or \
+           name == 'sitemap.xml.gz' or len(name) not in (17,19):
             return super(SiteMapTraverser, self).publishTraverse(request, name)
+
+        logger.info('call for sitemap: %s'%name)
 
         sitemap_view = self.context.restrictedTraverse('@@sitemap.xml.gz')
         language = self.extractLanguage(name)
+
+        if language is None:
+            return super(SiteMapTraverser, self).publishTraverse(request, name)
+
         sitemap_view.language = language
         sitemap_view.filename = 'sitemap_%s.xml.gz'%language
         return sitemap_view
@@ -31,7 +40,7 @@ class SiteMapTraverser(DefaultPublishTraverse):
             sitemap = name.split('.')[0]
             lang = str(sitemap.split('_')[1])
 
-        return lang
+            return lang
 
 
 class SiteMapView(BaseView):
