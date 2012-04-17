@@ -6,6 +6,7 @@ example.
 """
 
 from collective.linguasitemap.tests import base
+from plone.browserlayer import utils
 
 class TestSetup(base.TestCase):
     """The name of the class should be meaningful. This may be a class that
@@ -19,10 +20,24 @@ class TestSetup(base.TestCase):
     def beforeTearDown(self):
         pass
 
-    def test_view_methods(self):
-        for t in ('Link', 'Folder', 'Topic'):
-            views = self.portal_types.getTypeInfo(t).view_methods
-#            self.failUnless("my_view" in views)
+    def test_browserlayer(self):
+        from collective.linguasitemap.browser.interfaces import ILayer
+        layers = utils.registered_layers()
+        self.assertIn(ILayer, layers)
+
+class TestUninstall(base.TestCase):
+    """Test if the addon uninstall well"""
+
+    def setUp(self):
+        super(TestUninstall, self).setUp()
+        qi = self.portal['portal_quickinstaller']
+        qi.uninstallProducts(products=['collective.linguasitemap'])
+
+    def test_uninstall_browserlayer(self):
+        from collective.linguasitemap.browser.interfaces import ILayer
+        layers = utils.registered_layers()
+        self.assertNotIn(ILayer, layers)
+
 
 def test_suite():
-   return base.build_test_suite((TestSetup,))
+   return base.build_test_suite((TestSetup, TestUninstall))

@@ -9,19 +9,24 @@ class Layer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # Load ZCML
+        import Products.LinguaPlone
         import collective.linguasitemap
+        self.loadZCML(package=Products.LinguaPlone)
         self.loadZCML(package=collective.linguasitemap)
 
         # Install product and call its initialize() function
+        z2.installProduct(app, 'Products.LinguaPlone')
         z2.installProduct(app, 'collective.linguasitemap')
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
+        self.applyProfile(portal, 'Products.LinguaPlone:LinguaPlone')
         self.applyProfile(portal, 'collective.linguasitemap:default')
 
     def tearDownZope(self, app):
         # Uninstall product
         z2.uninstallProduct(app, 'collective.linguasitemap')
+        z2.uninstallProduct(app, 'Products.LinguaPlone')
 
 FIXTURE = Layer()
 
