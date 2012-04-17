@@ -37,7 +37,7 @@ class FunctionaTestSiteMap(base.FunctionalTestCase):
     def test_language(self):
         browser = Browser(self.layer['app'])
         sm = browser.open(self.portal.absolute_url()+'/sitemap.xml.gz')
-        self.assertFalse(browser.isHtml())
+        self.assertFalse(browser.isHtml)
         self.assert_(len(browser.contents)>0)
         #TODO: open the gzip and then parse the xml and then verify content
 
