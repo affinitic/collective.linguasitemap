@@ -1,36 +1,19 @@
 from plone.testing import z2
 
-from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import PloneWithPackageLayer
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting, FunctionalTesting
 
-class Layer(PloneSandboxLayer):
-    default_bases = (PLONE_FIXTURE,)
+import collective.linguasitemap
 
-    def setUpZope(self, app, configurationContext):
-        # Load ZCML
-        import Products.LinguaPlone
-        import collective.linguasitemap
-        self.loadZCML(package=Products.LinguaPlone)
-        self.loadZCML(package=collective.linguasitemap)
-
-        # Install product and call its initialize() function
-        z2.installProduct(app, 'Products.LinguaPlone')
-        z2.installProduct(app, 'collective.linguasitemap')
-
-    def setUpPloneSite(self, portal):
-        # Install into Plone site using portal_setup
-        self.applyProfile(portal, 'Products.LinguaPlone:LinguaPlone')
-        self.applyProfile(portal, 'collective.linguasitemap:default')
-
-    def tearDownZope(self, app):
-        # Uninstall product
-        z2.uninstallProduct(app, 'collective.linguasitemap')
-        z2.uninstallProduct(app, 'Products.LinguaPlone')
-
-FIXTURE = Layer()
+FIXTURE = PloneWithPackageLayer(zcml_filename="configure.zcml",
+                                zcml_package=collective.linguasitemap,
+                                additional_z2_products=('Products.LinguaPlone',),
+                                gs_profile_id='collective.linguasitemap:default',
+                                name="collective.linguasitemap:FIXTURE")
 
 INTEGRATION = IntegrationTesting(bases=(FIXTURE,),
                         name="collective.linguasitemap:Integration")
+
 FUNCTIONAL = FunctionalTesting(bases=(FIXTURE,),
                         name="collective.linguasitemap:Functional")

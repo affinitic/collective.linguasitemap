@@ -1,14 +1,8 @@
-"""This is an integration "unit" test. It uses PloneTestCase, but does not
-use doctest syntax.
-
-You will find lots of examples of this type of test in CMFPlone/tests, for 
-example.
-"""
-
+import unittest2 as unittest
 from collective.linguasitemap.tests import base
 from plone.browserlayer import utils
 
-class TestSetup(base.TestCase):
+class TestSetup(base.IntegrationTestCase):
     """The name of the class should be meaningful. This may be a class that
     tests the installation of a particular product.
     """
@@ -25,7 +19,7 @@ class TestSetup(base.TestCase):
         layers = utils.registered_layers()
         self.assertIn(ILayer, layers)
 
-class TestUninstall(base.TestCase):
+class TestUninstall(base.IntegrationTestCase):
     """Test if the addon uninstall well"""
 
     def setUp(self):
@@ -38,6 +32,5 @@ class TestUninstall(base.TestCase):
         layers = utils.registered_layers()
         self.assertNotIn(ILayer, layers)
 
-
 def test_suite():
-   return base.build_test_suite((TestSetup, TestUninstall))
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

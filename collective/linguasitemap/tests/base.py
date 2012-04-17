@@ -4,49 +4,34 @@ from plone.app import testing
 from collective.linguasitemap.tests import layer
 from collective.linguasitemap.tests import utils
 
-class UnitTestCase(unittest.TestCase):
-    
-    def setUp(self):
-        from ZPublisher.tests.testPublish import Request
-        from zope.annotation.interfaces import IAttributeAnnotatable
-        from collective.linguasitemap.browser.interfaces import ILayer
-        super(UnitTestCase, self).setUp()
-        self.context = utils.FakeContext()
-        self.request = Request()
-        interface.alsoProvides(self.request,
-                               (IAttributeAnnotatable,ILayer))
-
-class TestCase(unittest.TestCase):
+class IntegrationTestCase(unittest.TestCase):
 
     layer = layer.INTEGRATION
 
     def setUp(self):
-        from zope.annotation.interfaces import IAttributeAnnotatable
-        from collective.linguasitemap.browser.interfaces import ILayer
-        interface.alsoProvides(self.layer['request'],
-                               (IAttributeAnnotatable,ILayer))
-        super(TestCase, self).setUp()
+        super(IntegrationTestCase, self).setUp()
         self.portal = self.layer['portal']
         testing.setRoles(self.portal, testing.TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory('Folder', 'test-folder')
-        testing.setRoles(self.portal, testing.TEST_USER_ID, ['Member'])
-        self.folder = self.portal['test-folder']
+        testing.login(self.portal, testing.TEST_USER_NAME)
+        languages = ['en','fr','nl']
+        defaultLanguage = 'en'
+        self.portal.portal_languages.manage_setLanguageSettings(defaultLanguage,
+                                                                languages)
+        self.portal.invokeFactory('Folder', 'dossier')
+        self.folder = self.portal['dossier']
+        self.folder.setLanguage('fr')
+        self.folder.reindexObject()
+        self.portal.portal_properties.site_properties.enable_sitemap = True
 
-
-class FunctionalTestCase(unittest.TestCase):
+class FunctionalTestCase(IntegrationTestCase):
 
     layer = layer.FUNCTIONAL
-
+    
     def setUp(self):
-        from zope.annotation.interfaces import IAttributeAnnotatable
-        from collective.linguasitemap.browser.interfaces import ILayer
-        interface.alsoProvides(self.layer['request'],
-                               (IAttributeAnnotatable,ILayer))
-        self.portal = self.layer['portal']
-        testing.setRoles(self.portal, testing.TEST_USER_ID, ['Manager'])
-        self.portal.invokeFactory('Folder', 'test-folder')
-        testing.setRoles(self.portal, testing.TEST_USER_ID, ['Member'])
-        self.folder = self.portal['test-folder']
+        super(FunctionalTestCase, self).setUp()
+        #we need to commit to be able to use browser
+        import transaction
+        transaction.commit()
 
 def build_test_suite(test_classes):
     suite = unittest.TestSuite()
