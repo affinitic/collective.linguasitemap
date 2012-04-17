@@ -28,6 +28,7 @@ setup(name='collective.linguasitemap',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.LinguaPlone',
           # -*- Extra requirements: -*-
       ],
       extras_require = dict(
