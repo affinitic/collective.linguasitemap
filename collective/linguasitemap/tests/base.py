@@ -1,12 +1,11 @@
 import unittest2 as unittest
 from zope import interface
-from plone.app import testing
-from collective.linguasitemap.tests import layer
+from collective.linguasitemap import testing
 from collective.linguasitemap.tests import utils
 
 class IntegrationTestCase(unittest.TestCase):
 
-    layer = layer.INTEGRATION
+    layer = testing.INTEGRATION
 
     def setUp(self):
         super(IntegrationTestCase, self).setUp()
@@ -25,7 +24,7 @@ class IntegrationTestCase(unittest.TestCase):
 
 class FunctionalTestCase(IntegrationTestCase):
 
-    layer = layer.FUNCTIONAL
+    layer = testing.FUNCTIONAL
     
     def setUp(self):
         super(FunctionalTestCase, self).setUp()
@@ -33,8 +32,3 @@ class FunctionalTestCase(IntegrationTestCase):
         import transaction
         transaction.commit()
 
-def build_test_suite(test_classes):
-    suite = unittest.TestSuite()
-    for klass in test_classes:
-        suite.addTest(unittest.makeSuite(klass))
-    return suite

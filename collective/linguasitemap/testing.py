@@ -1,9 +1,6 @@
 from plone.testing import z2
 
-from plone.app.testing import PloneWithPackageLayer
-from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import IntegrationTesting, FunctionalTesting
-
+from plone.app.testing import *
 import collective.linguasitemap
 
 FIXTURE = PloneWithPackageLayer(zcml_filename="configure.zcml",

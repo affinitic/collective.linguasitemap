@@ -9,6 +9,7 @@ class UnitTestSiteMap(unittest.TestCase):
     def test_language(self):
         from collective.linguasitemap.browser import sitemap
         sm = sitemap.SiteMapView(utils.FakeContext(), None)
+        self.assertTrue(hasattr(sm, 'language'))
         self.assertEqual(sm.language, 'all')
 
 class IntegrationTestSiteMap(base.IntegrationTestCase):
@@ -19,14 +20,17 @@ class IntegrationTestSiteMap(base.IntegrationTestCase):
     def test_language(self):
         from collective.linguasitemap.browser import sitemap
         sm = sitemap.SiteMapView(self.portal, self.portal.REQUEST)
+        self.assertTrue(hasattr(sm, 'language'))
         self.assertEqual(sm.language,'all')
 
         #FIXME: theses tests fails... don't know why
         sm = component.getMultiAdapter((self.portal, self.portal.REQUEST),
                                        name="sitemap.xml.gz")
+        self.assertTrue(hasattr(sm, 'language'))
         self.assertEqual(sm.language,'all')
 
         sm = self.portal.restrictedTraverse('@@sitemap.xml.gz')
+        self.assertTrue(hasattr(sm, 'language'))
         self.assertEqual(sm.language,'all')
 
 class FunctionaTestSiteMap(base.FunctionalTestCase):
