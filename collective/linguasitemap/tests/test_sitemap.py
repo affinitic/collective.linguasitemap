@@ -23,7 +23,6 @@ class IntegrationTestSiteMap(base.IntegrationTestCase):
         self.assertTrue(hasattr(sm, 'language'))
         self.assertEqual(sm.language,'all')
 
-        #FIXME: theses tests fails... don't know why
         sm = component.getMultiAdapter((self.portal, self.portal.REQUEST),
                                        name="sitemap.xml.gz")
         self.assertTrue(hasattr(sm, 'language'))

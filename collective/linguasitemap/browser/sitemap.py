@@ -1,4 +1,4 @@
-from plone.app.layout.sitemap.sitemap import SiteMapView as BaseView
+from plone.app.layout.sitemap import sitemap as base
 from BTrees.OOBTree import OOBTree
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -43,7 +43,7 @@ class SiteMapTraverser(DefaultPublishTraverse):
             return lang
 
 
-class SiteMapView(BaseView):
+class SiteMapView(base.SiteMapView):
     """override sitemap"""
 
     def __init__(self, context, request):

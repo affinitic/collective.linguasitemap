@@ -2,6 +2,8 @@ import unittest2 as unittest
 from zope import interface
 from collective.linguasitemap import testing
 from collective.linguasitemap.tests import utils
+from collective.linguasitemap.browser.interfaces import ILayer
+from plone.browserlayer.layer import mark_layer
 
 class IntegrationTestCase(unittest.TestCase):
 
@@ -21,6 +23,8 @@ class IntegrationTestCase(unittest.TestCase):
         self.folder.setLanguage('fr')
         self.folder.reindexObject()
         self.portal.portal_properties.site_properties.enable_sitemap = True
+        self.request = self.layer['request']
+        mark_layer(self.portal, self)
 
 class FunctionalTestCase(IntegrationTestCase):
 
