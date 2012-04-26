@@ -35,7 +35,7 @@ class SiteMapTraverser(DefaultPublishTraverse):
         return sitemap_view
 
     def extractLanguage(self, name):
-
+        if type(name) not in (str, unicode): return
         if name.startswith('sitemap') and len(name)>11 and '_' in name:
             sitemap = name.split('.')[0]
             lang = str(sitemap.split('_')[1])
